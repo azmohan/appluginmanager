@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.plugin.com" xmlns="http://www.plugin.com">
+    <xs:simpleType name="parameterdefType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STRING" />
+            <xs:enumeration value="INT" />
+            <xs:enumeration value="FLOAT" />
+            <xs:enumeration value="DOUBLE" />
+            <xs:enumeration value="BOOLEAN" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="idType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([a-zA-Z0-9])*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="classType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([a-zA-Z]+[.][a-zA-Z0-9_]+)[.]*.*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="plugin">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="extension" />
+                <xs:element ref="extension-point" />
+            </xs:choice>
+            <xs:attribute name="class" type="classType" />
+            <xs:attribute name="id" type="idType" use="required" />
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="require-plugin-id" />
+            <xs:attribute name="version" type="xs:positiveInteger" />
+            <xs:attribute name="require-max-host-version" type="xs:positiveInteger" />
+            <xs:attribute name="require-min-host-version" type="xs:positiveInteger" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="extension">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="parameter" />
+            </xs:sequence>
+            <xs:attribute name="class" type="classType" use="required" />
+            <xs:attribute name="icon" />
+            <xs:attribute name="id" type="idType" use="required" />
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="plugin-id" type="xs:string" use="required" />
+            <xs:attribute name="point-id" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="parameter">
+        <xs:complexType>
+            <xs:attribute name="id" type="idType" use="required" />
+            <xs:attribute name="value" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="extension-point">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="parameter-def" />
+            </xs:sequence>
+            <xs:attribute name="class" type="classType" use="required" />
+            <xs:attribute name="id" type="idType" use="required" />
+            <xs:attribute name="name" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="parameter-def">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required" />
+            <xs:attribute name="type" type="parameterdefType" use="required" />
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
